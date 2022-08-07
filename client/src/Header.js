@@ -6,8 +6,14 @@ import { useState } from 'react';
 function Header() {
   
   const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
+  
   function toggleDropdown() {
-    if (dropdownVisibilityClass === 'hidden') {
+
+    //console.log(dropdownVisibilityClass)
+    //console.log(dropdownVisibilityClass.value)
+
+
+    if (dropdownVisibilityClass.value === 'hidden') {
       setDropdownVisibilityClass({value: 'block'});
     }
     else {
@@ -37,7 +43,7 @@ function Header() {
           <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
         </button>
 
-        <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden' + dropdownVisibilityClass}>
+        <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
           <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' >
             <LoginIcon className='w-6 h-6 mr-2 ' />
             Log In / Sign Up
