@@ -1,18 +1,32 @@
 import redditlogo from './redditlogo.png';
 import {HomeIcon, SearchIcon,ChevronDownIcon} from '@heroicons/react/solid';
 import {UserIcon, LoginIcon} from '@heroicons/react/outline';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function Header() {
   
   const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
   
+  function useUserDropdown(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setDropdownVisibilityClass({value: 'hidden'});
+        }
+      }
+      document.addEventListener({type: 'mousedown'}, handleClickOutside);
+      return () => {
+        document.removeEventListener({type: 'mousedown'}, handleClickOutside);
+      };
+     
+    }, {deps: [ref]}
+    );
+  }
+
+  const userDropdownRef = useRef({initialValue: null});
+  useUserDropdown(userDropdownRef);
+
   function toggleDropdown() {
-
-    //console.log(dropdownVisibilityClass)
-    //console.log(dropdownVisibilityClass.value)
-
-
     if (dropdownVisibilityClass.value === 'hidden') {
       setDropdownVisibilityClass({value: 'block'});
     }
@@ -38,7 +52,7 @@ function Header() {
         <button className='rounded-full border bg-sky-700 text-white hover:bg-sky-600 font-bold pl-5 pr-5 pb-1' >Sign Up</button>
         
 
-        <button className=' rounded-md flex ml-4 border border-white hover:border-reddit_border-default' onClick={() => toggleDropdown()} >
+        <button className=' rounded-md flex ml-4 border border-white hover:border-reddit_border-default' onClick={() => toggleDropdown()} ref={userDropdownRef} >
           <UserIcon className='text-gray-500 w-6 h-6 m-1' />
           <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
         </button>
