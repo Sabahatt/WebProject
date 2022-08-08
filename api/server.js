@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from "mongoose";
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import User from './models/user';
 
 const app = express()
 const port = 4000
@@ -31,7 +32,13 @@ app.get('/', (req, res) => {
 app.post('/register',(req,res)=>{
   const {email, username, password} = req.body;
   const HashedPassword = bcrypt.hashSync(password, 10);
-
+  const user = new User({email,username,password});
+  user.save().then(()=> {
+    res.sendStatus(201);
+  }).catch(e => {
+    console.log(e);
+    res.sendStatus(500);
+  })
 })
 
 app.listen(port, () => {
