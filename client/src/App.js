@@ -2,13 +2,16 @@ import './index.css';
 import Header from './Header';
 import BoardHeader from './BoardHeader';
 import PostForm from './PostForm';
+import AuthModel from './AuthModel';
 
 function App() {
   return (
     <div>
       <Header/>
+      <AuthModel />
       <BoardHeader/>
       <PostForm />
+      
       
       <div className=' px-6' >
         <div className='border border-reddit_border-default p-2 rounded-md' >

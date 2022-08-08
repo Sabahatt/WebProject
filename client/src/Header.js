@@ -1,30 +1,13 @@
 import redditlogo from './redditlogo.png';
 import {HomeIcon, SearchIcon,ChevronDownIcon} from '@heroicons/react/solid';
 import {UserIcon, LoginIcon} from '@heroicons/react/outline';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import ClickOutHandler from 'react-clickout-handler'
+import Button from './Button';
 
 function Header() {
   
   const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
-  
-  function useUserDropdown(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setDropdownVisibilityClass({value: 'hidden'});
-        }
-      }
-      document.addEventListener({type: 'mousedown'}, handleClickOutside);
-      return () => {
-        document.removeEventListener({type: 'mousedown'}, handleClickOutside);
-      };
-     
-    }, {deps: [ref]}
-    );
-  }
-
-  const userDropdownRef = useRef({initialValue: null});
-  useUserDropdown(userDropdownRef);
 
   function toggleDropdown() {
     if (dropdownVisibilityClass.value === 'hidden') {
@@ -48,14 +31,19 @@ function Header() {
           <input type="text" className="bg-reddit_light-brighter text-sm p-1 pl-2 pr-0 block  focus:outline-none" placeholder='Search Reddit' />
         </form>
 
-        <button className='rounded-full border border-sky-700 text-sky-700 hover:bg-sky-100 font-bold pl-5 pr-5 mr-1 pb-1' >Log In</button>
-        <button className='rounded-full border bg-sky-700 text-white hover:bg-sky-600 font-bold pl-5 pr-5 pb-1' >Sign Up</button>
+        <div className='mx-1 hidden sm:block' >
+          <Button outline className=' mx-2 ' >Log In</Button>
+          <Button className=' ' >Sign Up</Button>
+        </div>
+        
         
 
-        <button className=' rounded-md flex ml-4 border border-white hover:border-reddit_border-default' onClick={() => toggleDropdown()} ref={userDropdownRef} >
-          <UserIcon className='text-gray-500 w-6 h-6 m-1' />
-          <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
-        </button>
+        <ClickOutHandler  onClickOut={()=> setDropdownVisibilityClass({value: 'hidden'})} >
+          <button className=' rounded-md flex ml-4 border border-white hover:border-reddit_border-default' onClick={() => toggleDropdown()} >
+            <UserIcon className='text-gray-500 w-6 h-6 m-1' />
+            <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
+          </button>
+        </ClickOutHandler>
 
         <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
           <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' >

@@ -1,3 +1,6 @@
+import Button from "./Button";
+
+
 function BoardHeader() {
     return (
         <>
@@ -11,7 +14,7 @@ function BoardHeader() {
           <div className='pt-2 pl-4' >
             <h1 className='font-bold text-3xl' >webdev: reddit for web developers</h1>
             <h5 className='text-reddit_text-gray'>r/webdev</h5>
-            <button className='rounded-full border bg-red-700 text-white hover:bg-red-800 font-bold pr-5 pl-5 pb-1' >Join</button>
+            {/* <Button className='rounded-full border bg-red-700 text-white hover:bg-red-800 font-bold ' >Join</Button> */}
           </div>
         </div>
       </div>
