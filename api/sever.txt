@@ -1,3 +1,2 @@
-Testing
-dying
-again Testing
+Command for runing server
+$ node server.js
