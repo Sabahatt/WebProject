@@ -18,7 +18,9 @@ function AuthModel() {
                 
                 <Input type={"text"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " placeholder='USERNAME' />
                 <Input type={"password"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " placeholder='PASSWORD' />
-                <Button className=" w-full text-white" >Log In</Button>
+                <Button className=" w-full text-white" >
+                    {modalType === 'login' ? 'Log In' : 'Sign up' }
+                </Button>
                 {modalType === 'login' && (
                       <div>
                         New to Reddit? <button onClick={() => setModalType({value: 'register'})} >SIGN UP</button>
