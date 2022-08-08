@@ -8,27 +8,18 @@ function AuthModel() {
     const {username, setUsername} = useState({initialState: ''});
     const {password, setPassword} = useState({initialState: ''});
     
-<<<<<<< Updated upstream
-    
     //console.log(modalType.initialState)
-
-
-    function register()
-    {
-        console.log("register")
-    }
 
     function login()
     {
         console.log("login")
-=======
+    }
+
     function register (e) {
         e.preventDefault();
         const data = {email, username, password};
-        axios.post({url: 'http://localhost:4000/register'}, data, {config: {withCredentials:true}});
-        
-        
->>>>>>> Stashed changes
+        axios.post({url: 'http://localhost:4000/register'}, data, {config: {withCredentials:true}})        
+
     }
 
     return(
