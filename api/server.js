@@ -4,8 +4,10 @@ import cookieParser from 'cookie-parser';
 import mongoose from "mongoose";
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from './models/user';
 
+const secret = 'secret123';
 const app = express()
 const port = 4000
 
@@ -14,7 +16,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser())
 cors()
 app.use(cors({
-    origin: 'localhost:3000',
+    origin: 'http://localhost:3000',
     credentials: true,
 }))
 
@@ -33,8 +35,16 @@ app.post('/register',(req,res)=>{
   const {email, username, password} = req.body;
   const HashedPassword = bcrypt.hashSync(password, 10);
   const user = new User({email,username,password});
-  user.save().then(()=> {
-    res.sendStatus(201);
+  user.save().then( user => {
+    jwt.sign({payload: {id: user._id}}, secret, (err, token)=> {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      }
+      else {
+        res.status(201).cookie({name: 'token'}, token).send();
+      }
+    });
   }).catch(e => {
     console.log(e);
     res.sendStatus(500);
