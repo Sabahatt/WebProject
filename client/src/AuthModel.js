@@ -1,7 +1,10 @@
 import Button from "./Button";
 import Input from "./Input";
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import axios from 'axios'
+import AuthModelContext from "./AuthModelContext";
+import ClickOutHandler from 'react-clickout-handler';
+
 
 function AuthModel() {
     const [modalType, setModalType] = useState('login');
@@ -11,11 +14,15 @@ function AuthModel() {
     
     //console.log(modalType.initialState)
 
+    const modelContext = useContext(AuthModelContext);
+
+    const visibleClass = modelContext.show ? 'block' : 'hidden';
+
+
     function login()
     {
         console.log("login")
         console.log(modalType)
-
     }
 
     function register (e) {
@@ -28,7 +35,10 @@ function AuthModel() {
     }
 
     return(
-        <div className="w-screen h-screen fixed top-0 left-0 z-20 flex" style={{backgroundColor:'rgba(0,0,0,.6)'}} >
+        <div className={"w-screen h-screen fixed top-0 left-0 z-20 flex "+visibleClass} style={{backgroundColor:'rgba(0,0,0,.6)'}} >
+            
+        <ClickOutHandler  onClickOut={()=> modelContext.setShow(false)}>
+
             <div className=" border border-gray-700 w-3/4 sm:w-1/2 mx-auto bg-white p-5 self-center rounded-md" >
 
                 {modalType === 'login' && (
@@ -75,6 +85,8 @@ function AuthModel() {
                 )}
               
             </div>
+            </ClickOutHandler>
+
 
         </div>
 

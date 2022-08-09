@@ -1,13 +1,18 @@
 import redditlogo from './redditlogo.png';
 import {HomeIcon, SearchIcon,ChevronDownIcon} from '@heroicons/react/solid';
 import {UserIcon, LoginIcon} from '@heroicons/react/outline';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import ClickOutHandler from 'react-clickout-handler';
+import AuthModelContext from "./AuthModelContext";
+
 import Button from './Button';
 
 function Header() {
   
   const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
+
+  const modelContext = useContext(AuthModelContext);
+
 
   function toggleDropdown() {
     if (dropdownVisibilityClass.value === 'hidden') {
@@ -32,8 +37,8 @@ function Header() {
         </form>
 
         <div className='mx-1 hidden sm:block' >
-          <Button outline className=' mx-2 ' >Log In</Button>
-          <Button className=' ' >Sign Up</Button>
+          <Button outline className=' mx-2 ' onClick={() => modelContext.setShow(true)}>Log In</Button>
+          <Button className=' ' onClick={() => modelContext.setShow(true)}>Sign Up</Button>
         </div>
         
         
@@ -43,15 +48,16 @@ function Header() {
             <UserIcon className='text-gray-500 w-6 h-6 m-1' />
             <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
           </button>
-        </ClickOutHandler>
 
-        <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
-          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' >
+          <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
+          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={() => modelContext.setShow(true)}>
             <LoginIcon className='w-6 h-6 mr-2 ' />
             Log In / Sign Up
           </button>
-
         </div>
+        </ClickOutHandler>
+
+       
 
         </div>
       </header>
