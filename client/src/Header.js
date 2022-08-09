@@ -2,7 +2,7 @@ import redditlogo from './redditlogo.png';
 import {HomeIcon, SearchIcon,ChevronDownIcon} from '@heroicons/react/solid';
 import {UserIcon, LoginIcon} from '@heroicons/react/outline';
 import { useState } from 'react';
-import ClickOutHandler from 'react-clickout-handler'
+import ClickOutHandler from 'react-clickout-handler';
 import Button from './Button';
 
 function Header() {

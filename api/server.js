@@ -6,6 +6,7 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from './models/user.js';
+import Comment from './models/comment.js';
 
 const secret = 'secret123';
 const app = express()
@@ -56,6 +57,13 @@ app.post('/register',(req,res)=>{
     res.sendStatus(500);
   })
 })
+
+app.get('/commments', (req,res) => {
+  Comment.find().then( comments => {
+    res.json(comments);
+  });
+
+});
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}....`)
