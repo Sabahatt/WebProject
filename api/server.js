@@ -5,15 +5,16 @@ import mongoose from "mongoose";
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from './models/user';
+import User from './models/user.js';
 
 const secret = 'secret123';
 const app = express()
 const port = 4000
 
+
+app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cookieParser())
 cors()
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -27,12 +28,15 @@ const db = mongoose.connection;
 db.on('error',console.log)
 
 app.get('/', (req, res) => {
+  console.log("INDEX")
   res.send('Hello Server!')
 })
 
 // Register
 app.post('/register',(req,res)=>{
+  console.log("Register")
   const {email, username, password} = req.body;
+  console.log(req.body);
   const HashedPassword = bcrypt.hashSync(password, 10);
   const user = new User({email,username,password});
   user.save().then( user => {
@@ -43,6 +47,7 @@ app.post('/register',(req,res)=>{
       }
       else {
         res.status(201).cookie({name: 'token'}, token).send();
+        console.log("User Created");
       }
     });
   }).catch(e => {
@@ -52,5 +57,5 @@ app.post('/register',(req,res)=>{
 })
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+  console.log(`Server listening on port ${port}....`)
 })

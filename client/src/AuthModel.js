@@ -4,57 +4,73 @@ import {useState} from 'react';
 import axios from 'axios'
 
 function AuthModel() {
-    const [modalType, setModalType] = useState({initialState : 'login'});
-    const {email, setEmail} = useState({initialState: ''});
-    const {username, setUsername} = useState({initialState: ''});
-    const {password, setPassword} = useState({initialState: ''});
+    const [modalType, setModalType] = useState('login');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     
     //console.log(modalType.initialState)
 
     function login()
     {
         console.log("login")
-        console.log(modalType.initialState)
+        console.log(modalType)
 
     }
 
     function register (e) {
-        // e.preventDefault();
-        // const data = {email, username, password};
-        // axios.post({url: 'http://localhost:4000/register'}, data, {config: {withCredentials:true}})        
-        console.log(modalType)
-
+        e.preventDefault();
+        const data = {email, username, password};
+        console.log(data)
+        // axios.post({url: 'http://localhost:4000/register'}, data, {config: {withCredentials:true}})
+        axios.post('http://localhost:4000/register', data, {withCredentials:true})        
+        console.log("register")
     }
 
     return(
         <div className="w-screen h-screen fixed top-0 left-0 z-20 flex" style={{backgroundColor:'rgba(0,0,0,.6)'}} >
             <div className=" border border-gray-700 w-3/4 sm:w-1/2 mx-auto bg-white p-5 self-center rounded-md" >
-                {modalType.initialState === 'login' && (
+
+                {modalType === 'login' && (
                     <h1 className="text-2xl mb-3" >Log In</h1>
                 )}
-                {modalType.initialState === 'register' && (
+                {modalType === 'register' && (
                     <h1 className="text-2xl mb-3" >Sign Up</h1>
                 )}
-                {modalType.initialState === 'register' && (
-                    <Input type={"text"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " placeholder='EMAIL' value={email} onChange={e => setEmail(e.target.value)} />
 
+                {modalType === 'register' && (
+                    <Input type={"text"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " 
+                    placeholder='EMAIL' value={email} onChange={e => setEmail(e.target.value)} />
                 )}
                 
+                <Input type={"text"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " 
+                placeholder='USERNAME' value={username} onChange={e => setUsername(e.target.value)} />
+                <Input type={"password"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full "
+                 placeholder='PASSWORD' value={password} onChange={e => setPassword(e.target.value)} />
+
+                {modalType === 'login' && (
+                    <Button className=" w-full text-white" onClick={() => login()}>
+                        Log In
+                    </Button>
+                )}
+
+                {modalType === 'register' && (
+                    <Button className=" w-full text-white" onClick={ e => register(e) }>
+                        Sign up
+                    </Button>
+                )}
+
                 
 
-                <Input type={"text"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " placeholder='USERNAME' />
-                <Input type={"password"} className="placeholder:text-gray-500 placeholder:text-xs placeholder:font-bold mb-2 w-full " placeholder='PASSWORD' />
-                <Button className=" w-full text-white" onClick={() => {modalType.initialState === 'login' ? login() : register() } }>
-                    {modalType.initialState === 'login' ? 'Log In' : 'Sign up' }
-                </Button>
-                {modalType.initialState === 'login' && (
+
+                {modalType === 'login' && (
                       <div>
-                        New to Reddit? <button onClick={() => setModalType({initialState: 'register'})} >SIGN UP</button>
+                        New to Reddit? <button onClick={() => setModalType('register')} >SIGN UP</button>
                       </div>
                 )}
-                   {modalType.initialState === 'register' && (
+                   {modalType === 'register' && (
                       <div>
-                        Already have an account? <button onClick={() => setModalType({initialState: 'login'})} >Log In</button>
+                        Already have an account? <button onClick={() => setModalType('login')} >Log In</button>
                       </div>
                 )}
               
