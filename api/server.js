@@ -34,20 +34,21 @@ app.get('/', (req, res) => {
 
 // Register
 app.post('/register',(req,res)=>{
-  console.log("Register")
-  const {email, username, password} = req.body;
-  console.log(req.body);
-  const HashedPassword = bcrypt.hashSync(password, 10);
+  // console.log("/Register")
+  const {email, username} = req.body;
+  // console.log(req.body);
+  const password = bcrypt.hashSync(req.body.password, 10);
   const user = new User({email,username,password});
   user.save().then( user => {
-    jwt.sign({payload: {id: user._id}}, secret, (err, token)=> {
+    console.log(user);
+    jwt.sign({id: user._id}, secret, (err, token)=> {
       if (err) {
         console.log(err);
         res.sendStatus(500);
       }
       else {
-        res.status(201).cookie({name: 'token'}, token).send();
-        console.log("User Created");
+        res.status(201).cookie('token', token).send();
+        // console.log("User Created");
       }
     });
   }).catch(e => {
