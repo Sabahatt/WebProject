@@ -65,6 +65,26 @@ app.get('/commments', (req,res) => {
 
 });
 
+app.get('/user', (req,res)=>{
+  const cookie = req.cookie.token;
+  jwt.decode(token, secret, function (err, id) {
+    if (err){
+      console.log(err);
+      res.sendStatus(500);
+    }
+
+  })
+  user.findbyid(token)
+  .then(user => {
+    res.json(user);
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(500);
+  })
+
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}....`)
 })
