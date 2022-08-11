@@ -23,6 +23,9 @@ app.use(cors({
 }))
 
 
+
+
+
 // Mongoose
 await mongoose.connect('mongodb://localhost:27017/reddit',{useNewUrlParser:true,useUnifiedTopology:true,});
 const db = mongoose.connection;
@@ -41,7 +44,7 @@ app.post('/register',(req,res)=>{
   const password = bcrypt.hashSync(req.body.password, 10);
   const user = new User({email,username,password});
   user.save().then( user => {
-    console.log(user);
+    // console.log(user);
     jwt.sign({id: user._id}, secret, (err, token)=> {
       if (err) {
         console.log(err);
@@ -66,17 +69,13 @@ app.get('/commments', (req,res) => {
 });
 
 app.get('/user', (req,res)=>{
-  const cookie = req.cookie.token;
-  jwt.decode(token, secret, function (err, id) {
-    if (err){
-      console.log(err);
-      res.sendStatus(500);
-    }
-
-  })
-  user.findbyid(token)
+  // console.log("/User"); 
+  const token = req.cookies.token;
+  const userInfo = jwt.verify(token, secret);
+  // console.log(userInfo); 
+  User.findById(userInfo.id)
   .then(user => {
-    res.json(user);
+    res.json({username: user.username});
   })
   .catch(err => {
     console.log(err);
@@ -84,6 +83,35 @@ app.get('/user', (req,res)=>{
   })
 
 });
+
+app.post('/login',(req,res)=>{
+  const {username, password} = req.body;
+  User.findOne({username}).then(user =>
+    {
+      if(user&&user.username)
+      {
+        const passOk = bcrypt.compareSync(password, user.password);
+        if(passOk)
+        {
+          jwt.sign({id:user._id},secret,(err,token)=>{
+            res.cookie('token',token).send();
+          });
+        }
+        else {
+          res.status(422).json("Invalid");
+        }
+      } else {
+          res.status(422).json("Invalid");
+      }
+    });
+});
+
+
+app.post('/logout',(req,res)=>{
+  console.log("Login");
+  res.cookie('token','').send();
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}....`)

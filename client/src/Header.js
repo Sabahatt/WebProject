@@ -4,6 +4,8 @@ import {UserIcon, LoginIcon} from '@heroicons/react/outline';
 import { useState, useContext } from 'react';
 import ClickOutHandler from 'react-clickout-handler';
 import AuthModelContext from "./AuthModelContext";
+import UserContext from './UserContext';
+
 
 import Button from './Button';
 
@@ -12,6 +14,7 @@ function Header() {
   const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
 
   const modelContext = useContext(AuthModelContext);
+  const user = useContext(UserContext)
 
 
   function toggleDropdown() {
@@ -36,10 +39,13 @@ function Header() {
           <input type="text" className="bg-reddit_light-brighter text-sm p-1 pl-2 pr-0 block  focus:outline-none" placeholder='Search Reddit' />
         </form>
 
+      {user.username && (
         <div className='mx-1 hidden sm:block' >
-          <Button outline className=' mx-2 ' onClick={() => modelContext.setShow(true)}>Log In</Button>
-          <Button className=' ' onClick={() => modelContext.setShow(true)}>Sign Up</Button>
+        <Button outline className=' mx-2 ' onClick={() => modelContext.setShow(true)}>Log In</Button>
+        <Button className=' ' onClick={() => modelContext.setShow(true)}>Sign Up</Button>
         </div>
+      )}
+        
         
         
 
@@ -50,10 +56,28 @@ function Header() {
           </button>
 
           <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
+          
+
+          {user.username && (
+          <span className='block w-50 py-2 px-2 text-sm'>
+            Hello, {user.username};
+          </span>
+          )}
+
+          {user.username && (
           <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={() => modelContext.setShow(true)}>
             <LoginIcon className='w-6 h-6 mr-2 ' />
             Log In / Sign Up
           </button>
+          )}
+
+          {!user.username && (
+          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={user.logout()}>
+            <LoginIcon className='w-6 h-6 mr-2 ' />
+            Log Out
+          </button>
+          )}
+
         </div>
         </ClickOutHandler>
 

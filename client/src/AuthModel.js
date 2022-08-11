@@ -3,6 +3,8 @@ import Input from "./Input";
 import {useState, useContext} from 'react';
 import axios from 'axios'
 import AuthModelContext from "./AuthModelContext";
+import UserContext from "./UserContext";
+
 import ClickOutHandler from 'react-clickout-handler';
 
 
@@ -15,14 +17,22 @@ function AuthModel() {
     //console.log(modalType.initialState)
 
     const modelContext = useContext(AuthModelContext);
+    const user = useContext(UserContext);
+
+    
 
     const visibleClass = modelContext.show ? 'block' : 'hidden';
 
 
     function login()
     {
-        console.log("login")
-        console.log(modalType)
+        const data = {email, password};
+        axios.post('http://localhost:4000/login', data, {withCredentials:true})
+        .then(()=>{
+            modelContext.setShow(false);
+            user.setUser({username});
+        })
+
     }
 
     function register (e) {
@@ -30,8 +40,15 @@ function AuthModel() {
         const data = {email, username, password};
         console.log(data)
         // axios.post({url: 'http://localhost:4000/register'}, data, {config: {withCredentials:true}})
-        axios.post('http://localhost:4000/register', data, {withCredentials:true})        
-        console.log("register")
+        axios.post('http://localhost:4000/register', data, {withCredentials:true})
+        .then(()=> {
+            user.setUser({username})
+            modelContext.setShow(false);
+            setEmail('');
+            setUsername('');
+            setPassword('');
+        }
+        )
     }
 
     return(
