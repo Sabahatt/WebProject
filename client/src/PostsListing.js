@@ -14,7 +14,7 @@ function PostsListing() {
 
 
   return (
-    <div className="bg-reddit_light">
+    <div style={{backgroundColor:'white'}} className="bg-reddit_light">
       {comments.map(comment => (
         <Post {...comment} isListing={true} />
       ))}

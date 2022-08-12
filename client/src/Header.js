@@ -66,8 +66,8 @@ function Header() {
               <UserIcon className="w-6 h-6 text-gray-400 m-1" />
             )}
             {user.username && (
-              <div className="bg-gray-600 rounded-md w-8 h-8">
-                <img src={Avatar} alt="" style={{filter:'invert(100%)'}} className="block" />
+              <div className="rounded-md w-8 h-8">
+                <img src={Avatar} alt="" className="block" />
               </div>
             )}
 

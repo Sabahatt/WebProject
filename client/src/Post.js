@@ -10,7 +10,7 @@ function Post(props) {
     postClasses += " border-none";
   }
   return (
-    <div className="text-reddit_text pb-4">
+    <div  className="text-reddit_text pb-4">
       {props.open && (
         <div className={postClasses}>
           <PostContent {...props} />

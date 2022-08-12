@@ -1,28 +1,23 @@
-import express, { urlencoded } from 'express';
-import bodyParser from 'body-parser';
+import express from 'express';
+import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 import mongoose from "mongoose";
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from './models/user.js';
+import User from "./models/User.js";
 import Comment from "./models/Comment.js";
 import VotingRoutes from "./VotingRoutes.js";
 
 const secret = 'secret123';
-const app = express()
-const port = 4000
-
-
-app.use(cookieParser())
-app.use(bodyParser.json());
+const app = express();
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));
-
-cors()
+app.use(bodyParser.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-}))
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 
 app.use(VotingRoutes);
 
@@ -31,19 +26,14 @@ function getUserFromToken(token) {
   return User.findById(userInfo.id);
 }
 
-
-// Mongoose
-await mongoose.connect('mongodb://localhost:27017/reddit',{useNewUrlParser:true,useUnifiedTopology:true,});
+await mongoose.connect('mongodb://localhost:27017/reddit', {useNewUrlParser:true,useUnifiedTopology:true,});
 const db = mongoose.connection;
-db.on('error',console.log)
+db.on('error', console.log);
 
-// Index
 app.get('/', (req, res) => {
-  console.log("INDEX")
-  res.send('Hello Server!')
-})
+  res.send('ok');
+});
 
-// Register
 app.post('/register', (req, res) => {
   const {email,username} = req.body;
   const password = bcrypt.hashSync(req.body.password, 10);
@@ -63,7 +53,6 @@ app.post('/register', (req, res) => {
   });
 });
 
-// User
 app.get('/user', (req, res) => {
   const token = req.cookies.token;
 
@@ -78,7 +67,6 @@ app.get('/user', (req, res) => {
 
 });
 
-// Login
 app.post('/login', (req, res) => {
   const {username, password} = req.body;
   User.findOne({username}).then(user => {
@@ -97,13 +85,10 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Logout
-app.post('/logout',(req,res)=>{
-  // console.log("logout");
-  res.cookie('token','').send();
+app.post('/logout', (req, res) => {
+  res.cookie('token', '').send();
 });
 
-// Comments
 app.get('/comments', (req, res) => {
   Comment.find({rootId:null}).sort({postedAt: -1}).then(comments => {
     res.json(comments);
@@ -148,7 +133,4 @@ app.post('/comments', (req, res) => {
     });
 });
 
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}....`)
-})
+app.listen(4000);
