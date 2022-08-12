@@ -1,15 +1,30 @@
-function Post() {
-    return (
-    <div className=' px-6' >
-        <div className='border border-reddit_border-default p-2 rounded-md' >
-          <h5 className='text-reddit_text-gray text-sm' >Posted by u/test123 5 hours ago</h5>
-          <h2 className='text-2xl mb-3' >Flexbox.</h2>
-          <div className='text-sm leading-6' >
-            Heya, just started learning HTML and CSS last week. I find so much enjoyment learning already but I do have to ask if spending an entire day on learning CSS flexbox means I am not cut out for this kind of work? I dedicated 6 hours if not more and I feel as though I may forget everything tomorow. Will I struggle with JS?
-          </div>
+import {Link} from "react-router-dom";
+import PostContent from "./PostContent";
+
+function Post(props) {
+
+  let postClasses = "block border rounded-md " + (props.open ? "" : "hover:border-reddit_text cursor-pointer");
+  if (props.isListing) {
+    postClasses += " bg-reddit_light-brighter p-3 mx-6 border-2 border-reddit_border";
+  } else {
+    postClasses += " border-none";
+  }
+  return (
+    <div className="text-reddit_text pb-4">
+      {props.open && (
+        <div className={postClasses}>
+          <PostContent {...props} />
         </div>
-      </div>
-    );
+      )}
+      {!props.open && (
+        <Link to={{pathname:'/comments/'+props._id,state:{commentId:props._id}}} className={postClasses}>
+          <PostContent {...props} />
+        </Link>
+      )}
+
+
+    </div>
+  );
 }
 
 export default Post;

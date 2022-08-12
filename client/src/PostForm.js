@@ -1,17 +1,28 @@
-import {ChevronDownIcon, FireIcon} from '@heroicons/react/outline';
+import Avatar from "./avatar.png";
+import {useContext} from "react";
+import PostFormModalContext from "./PostFormModalContext";
 
 function PostForm() {
-    return (
-        <div className='bg-reddit_light px-6 py-4' >
-        <div className='border border-reddit_border-default p-2 rounded-md' >
-          <button className='flex rounded-full border bg-gray-100 text-red-700 font-bold pr-5 pl-5 pb-1'>
-          <FireIcon className='text-red-700 w-5 h-5 mt-2 m-1' />
-          <p className='pt-1' >Hot</p>
-          <ChevronDownIcon className='text-red-700 w-5 h-5 mt-2 ml-1' />
-          </button>
+  const modalContext = useContext(PostFormModalContext);
+  return (
+    <div className="bg-reddit_light px-6 py-4 text-gray-400">
+
+      <div className="border border-reddit_border p-2 rounded-md flex bg-reddit_light-brighter">
+        <div className="rounded-full bg-gray-600 overflow-hidden w-10 h-10">
+          <img src={Avatar} alt="" style={{filter:'invert(100%)'}} />
         </div>
+        <form action="" className="flex-grow bg-reddit_light-brightest border border-reddit_border ml-4 mr-2 rounded-md">
+          <input type="text"
+                 onFocus={e => {
+                   e.preventDefault();
+                   modalContext.setShow(true);
+                 }}
+                 className="bg-reddit_light-brightest p-2 px-3 text-sm block w-full rounded-md" placeholder="New post" />
+        </form>
       </div>
-    );
+
+    </div>
+  );
 }
 
 export default PostForm;

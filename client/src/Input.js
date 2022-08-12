@@ -1,7 +1,7 @@
-function Input(props) {
-    return (
-        <input {...props} className={"p-2 m-2 border border-gray-400 rounded-md block"+ props.className} />
-    );
+function Input (props) {
+  return (
+    <input {...props} className={"bg-reddit_dark-brighter text-reddit_text p-2 border border-reddit_dark-brightest rounded-md block "+props.className} />
+  );
 }
 
 export default Input;

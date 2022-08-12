@@ -1,41 +1,35 @@
 import './index.css';
-import Header from './Header';
-import BoardHeader from './BoardHeader';
-import PostForm from './PostForm';
-import AuthModel from './AuthModel';
-import AuthModelContext from './AuthModelContext';
-import UserContext from './UserContext';
-
-
-import {useState, useEffect} from 'react';
-
-import Post from './Post';
+import AuthModalContext from "./AuthModalContext";
+import {useState,useEffect} from "react";
 import axios from 'axios';
+import UserContext from "./UserContext";
+import Routing from "./Routing";
+import PostFormModalContext from "./PostFormModalContext";
 
 function App() {
-  
-  const [showAuthModel, setshowAuthModel] = useState(false);
-  const [user, setUser] = useState({});
+  const [showAuthModal,setShowAuthModal] = useState(false);
+  const [showPostFormModal,setShowPostFormModal] = useState(false);
+  const [user,setUser] = useState({});
 
-  useEffect(()=>{
-    // axios.get('http://localhost:4000/user',{withCredentials:true})
-    // .then(response=>setUser(response.data));
-  },[])
+  useEffect(() => {
 
-  
+    axios.get('http://localhost:4000/user', {withCredentials:true})
+      .then(response => setUser(response.data));
+
+  }, []);
+  function logout() {
+    axios.post('http://localhost:4000/logout', {}, {withCredentials:true})
+      .then(() => setUser({}));
+  }
 
   return (
-    <AuthModelContext.Provider value={{show:showAuthModel,setShow:setshowAuthModel}}>
-    <UserContext.Provider value={{...user,setUser}}>
-
-      <Header/>
-      <AuthModel />
-      <BoardHeader/>
-      <PostForm />
-      <Post />
-
-    </UserContext.Provider>
-    </AuthModelContext.Provider>
+    <AuthModalContext.Provider value={{show:showAuthModal,setShow:setShowAuthModal}}>
+      <PostFormModalContext.Provider value={{show:showPostFormModal,setShow:setShowPostFormModal}}>
+        <UserContext.Provider value={{...user, logout, setUser}}>
+          <Routing />
+        </UserContext.Provider>
+      </PostFormModalContext.Provider>
+    </AuthModalContext.Provider>
   );
 }
 

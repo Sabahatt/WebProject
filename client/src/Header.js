@@ -1,101 +1,105 @@
-import redditlogo from './redditlogo.png';
-import {HomeIcon, SearchIcon,ChevronDownIcon} from '@heroicons/react/solid';
-import {UserIcon, LoginIcon} from '@heroicons/react/outline';
-import { useState, useContext } from 'react';
+import Logo from "./logo.png";
+import {
+  BellIcon,
+  ChatIcon,
+  ChevronDownIcon,
+  LoginIcon,
+  LogoutIcon,
+  PlusIcon,
+  SearchIcon,
+  UserIcon
+} from "@heroicons/react/outline";
+import Avatar from "./avatar.png";
 import ClickOutHandler from 'react-clickout-handler';
-import AuthModelContext from "./AuthModelContext";
-import UserContext from './UserContext';
-import axios from 'axios';
-
-
-
-import Button from './Button';
+import Button from "./Button";
+import {useState,useContext} from 'react';
+import AuthModalContext from "./AuthModalContext";
+import UserContext from "./UserContext";
+import {Link} from "react-router-dom";
 
 function Header() {
-  
-  const [dropdownVisibilityClass, setDropdownVisibilityClass] = useState({initialState: 'hidden'});
-
-  const modelContext = useContext(AuthModelContext);
-  const user = useContext(UserContext)
-
-  function logout()
-  {
-    console.log("log yahi hai na")
-    axios.post('http://localhost:4000/logout',{withCredentials:true})
-    // .then(()=> setUser({}));
-  }
-
-  function toggleDropdown() {
-    if (dropdownVisibilityClass.value === 'hidden') {
-      setDropdownVisibilityClass({value: 'block'});
-    }
-    else {
-      setDropdownVisibilityClass({value: 'hidden'});
+  const [userDropdownVisibilityClass,setUserDropdownVisibilityClass] = useState('hidden');
+  function toggleUserDropdown() {
+    if (userDropdownVisibilityClass === 'hidden') {
+      setUserDropdownVisibilityClass('block');
+    } else {
+      setUserDropdownVisibilityClass('hidden');
     }
   }
-    return (
-        <header className='bg-reddit_light w-full p-2'>
-        <div className="flex mx-4 relative">
-        <img src={redditlogo} alt='' className='w-8 h-8 mr-4'/>
-        <button className='rounded-md flex' >
-        <HomeIcon className=' block w-8 h-8 mr-5' />
-        <ChevronDownIcon className=' w-6 h-6 mt-2 ml-5' />
-        </button>
-
-        <form action="" className='bg-reddit_light-brighter px-3 flex rounded-md border border-reddit_border mx-4 flex-grow'>
-          <SearchIcon className="text-slate-500 h-6 w-6 mt-1" />
-          <input type="text" className="bg-reddit_light-brighter text-sm p-1 pl-2 pr-0 block  focus:outline-none" placeholder='Search Reddit' />
+  const authModal = useContext(AuthModalContext);
+  const user = useContext(UserContext);
+  return (
+    <header className="w-full bg-reddit_light p-2">
+      <div className="mx-4 flex relative">
+        <Link to="/">
+          <img src={Logo} alt="" className="w-8 h-8 mr-4"/>
+        </Link>
+        <form action="" className="bg-reddit_light-brighter px-3 flex rounded-md border border-reddit_border mx-4 flex-grow">
+          <SearchIcon className="text-gray-300 h-6 w-6 mt-1" />
+          <input type="text" className="bg-reddit_light-brighter text-sm p-1 pl-2 pr-0 block focus:outline-none text-white" placeholder="Search" />
         </form>
 
-        {/* <button onClick={()=>logout()}>logout</button> */}
+        {user.username && (
+          <>
+            <button className="px-2 py-1">
+              <ChatIcon className="text-gray-400 w-6 h-6 mx-2" />
+            </button>
+            <button className="px-2 py-1">
+              <BellIcon className="text-gray-400 w-6 h-6 mx-2" />
+            </button>
+            <button className="px-2 py-1">
+              <PlusIcon className="text-gray-400 w-6 h-6 mx-2" />
+            </button>
+          </>
+        )}
 
-      {/* {user.username && ( */}
-        <div className='mx-1 hidden sm:block' >
-        <Button outline className=' mx-2 ' onClick={() => modelContext.setShow(true)}>Log In</Button>
-        <Button className=' ' onClick={() => modelContext.setShow(true)}>Sign Up</Button>
-        </div>
-      {/* )} */}
-        
-        
-        
+        {!user.username && (
+          <div className="mx-2 hidden sm:block">
+            <Button outline className=" mr-1 h-8 " onClick={() => authModal.setShow('login')}>Log In</Button>
+            <Button className=" h-8 " onClick={() => authModal.setShow('register')}>Sign Up</Button>
+          </div>
+        )}
 
-        <ClickOutHandler  onClickOut={()=> setDropdownVisibilityClass({value: 'hidden'})} >
-          <button className=' rounded-md flex ml-4 border border-white hover:border-reddit_border-default' onClick={() => toggleDropdown()} >
-            <UserIcon className='text-gray-500 w-6 h-6 m-1' />
-            <ChevronDownIcon className='text-gray-500 w-5 h-5 mt-2 ml-1' />
+        <ClickOutHandler onClickOut={() => setUserDropdownVisibilityClass('hidden')}>
+          <button className="rounded-md flex ml-4 border border-gray-700" onClick={() => toggleUserDropdown()}>
+            {!user.username && (
+              <UserIcon className="w-6 h-6 text-gray-400 m-1" />
+            )}
+            {user.username && (
+              <div className="bg-gray-600 rounded-md w-8 h-8">
+                <img src={Avatar} alt="" style={{filter:'invert(100%)'}} className="block" />
+              </div>
+            )}
+
+            <ChevronDownIcon className="text-gray-500 w-5 h-5 mt-2 m-1" />
           </button>
-
-          <div className={'absolute right-0 top-8 hover:text-white bg-white border border-reddit_border-default z-10 rounded-md overflow-hidden ' + dropdownVisibilityClass.value}>
-          
-
-          {user.username && (
-          <span className='block w-50 py-2 px-2 text-sm'>
-            Hello, {user.username};
-          </span>
-          )}
-
-          {/* {user.username && ( */}
-          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={() => modelContext.setShow(true)}>
-            <LoginIcon className='w-6 h-6 mr-2 ' />
-            Log In / Sign Up
-          </button>
-          {/* )} */}
-
-          {/* {!user.username && ( */}
-          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={()=> logout()}>
-            <LoginIcon className='w-6 h-6 mr-2 ' />
-            Log Out
-          </button>
-          {/* )} */}
-
-        </div>
+          <div style={{backgroundColor:'white'}} className={"absolute right-0 top-8 bg-reddit_light border border-gray-700 z-10 rounded-md text-reddit_text overflow-hidden "+userDropdownVisibilityClass}>
+            {user.username && (
+              <span className="block w-50 py-2 px-3 text-sm">
+                Hello, {user.username}!
+              </span>
+            )}
+            {!user.username && (
+              <button
+                onClick={() => authModal.setShow('login')}
+                className="block flex w-50 py-2 px-3 hover:bg-gray-300 hover:text-black text-sm">
+                <LoginIcon className="w-5 h-5 mr-2" />
+                Log In / Sign Up
+              </button>
+            )}
+            {user.username && (
+              <button
+                onClick={() => user.logout()}
+                className="block flex w-50 py-2 px-3 hover:bg-gray-300 hover:text-black text-sm">
+                <LogoutIcon className="w-5 h-5 mr-2" />
+                Logout
+              </button>
+            )}
+          </div>
         </ClickOutHandler>
-
-       
-
-        </div>
-      </header>
-    );
+      </div>
+    </header>
+  );
 }
 
 export default Header;
