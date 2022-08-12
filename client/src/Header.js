@@ -49,12 +49,12 @@ function Header() {
 
         {/* <button onClick={()=>logout()}>logout</button> */}
 
-      {user.username && (
+      {/* {user.username && ( */}
         <div className='mx-1 hidden sm:block' >
         <Button outline className=' mx-2 ' onClick={() => modelContext.setShow(true)}>Log In</Button>
         <Button className=' ' onClick={() => modelContext.setShow(true)}>Sign Up</Button>
         </div>
-      )}
+      {/* )} */}
         
         
         

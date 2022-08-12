@@ -6,7 +6,6 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from './models/user.js';
-import Comment from './models/comment.js';
 
 const secret = 'secret123';
 const app = express()
@@ -16,6 +15,7 @@ const port = 4000
 app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+
 cors()
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -23,14 +23,12 @@ app.use(cors({
 }))
 
 
-
-
-
 // Mongoose
 await mongoose.connect('mongodb://localhost:27017/reddit',{useNewUrlParser:true,useUnifiedTopology:true,});
 const db = mongoose.connection;
 db.on('error',console.log)
 
+// Index
 app.get('/', (req, res) => {
   console.log("INDEX")
   res.send('Hello Server!')
@@ -61,13 +59,7 @@ app.post('/register',(req,res)=>{
   })
 })
 
-app.get('/commments', (req,res) => {
-  Comment.find().then( comments => {
-    res.json(comments);
-  });
-
-});
-
+// User
 app.get('/user', (req,res)=>{
   // console.log("/User"); 
   const token = req.cookies.token;
@@ -84,6 +76,7 @@ app.get('/user', (req,res)=>{
 
 });
 
+// Login
 app.post('/login',(req,res)=>{
   const {username, password} = req.body;
   User.findOne({username}).then(user =>
@@ -106,9 +99,9 @@ app.post('/login',(req,res)=>{
     });
 });
 
-
+// Logout
 app.post('/logout',(req,res)=>{
-  console.log("logout");
+  // console.log("logout");
   res.cookie('token','').send();
 });
 
