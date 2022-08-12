@@ -5,6 +5,8 @@ import { useState, useContext } from 'react';
 import ClickOutHandler from 'react-clickout-handler';
 import AuthModelContext from "./AuthModelContext";
 import UserContext from './UserContext';
+import axios from 'axios';
+
 
 
 import Button from './Button';
@@ -16,6 +18,12 @@ function Header() {
   const modelContext = useContext(AuthModelContext);
   const user = useContext(UserContext)
 
+  function logout()
+  {
+    console.log("log yahi hai na")
+    axios.post('http://localhost:4000/logout',{withCredentials:true})
+    // .then(()=> setUser({}));
+  }
 
   function toggleDropdown() {
     if (dropdownVisibilityClass.value === 'hidden') {
@@ -38,6 +46,8 @@ function Header() {
           <SearchIcon className="text-slate-500 h-6 w-6 mt-1" />
           <input type="text" className="bg-reddit_light-brighter text-sm p-1 pl-2 pr-0 block  focus:outline-none" placeholder='Search Reddit' />
         </form>
+
+        {/* <button onClick={()=>logout()}>logout</button> */}
 
       {user.username && (
         <div className='mx-1 hidden sm:block' >
@@ -64,19 +74,19 @@ function Header() {
           </span>
           )}
 
-          {user.username && (
+          {/* {user.username && ( */}
           <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={() => modelContext.setShow(true)}>
             <LoginIcon className='w-6 h-6 mr-2 ' />
             Log In / Sign Up
           </button>
-          )}
+          {/* )} */}
 
-          {!user.username && (
-          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={user.logout()}>
+          {/* {!user.username && ( */}
+          <button className='flex w-40 py-2 px-3 hover:bg-sky-600  text-sm' onClick={()=> logout()}>
             <LoginIcon className='w-6 h-6 mr-2 ' />
             Log Out
           </button>
-          )}
+          {/* )} */}
 
         </div>
         </ClickOutHandler>

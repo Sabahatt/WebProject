@@ -108,7 +108,7 @@ app.post('/login',(req,res)=>{
 
 
 app.post('/logout',(req,res)=>{
-  console.log("Login");
+  console.log("logout");
   res.cookie('token','').send();
 });
 

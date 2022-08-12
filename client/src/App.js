@@ -18,20 +18,15 @@ function App() {
   const [user, setUser] = useState({});
 
   useEffect(()=>{
-    axios.get('http://localhost:4000/user',{withCredentials:true})
-    .then(response=>setUser(response.data));
+    // axios.get('http://localhost:4000/user',{withCredentials:true})
+    // .then(response=>setUser(response.data));
   },[])
 
-  function logout()
-  {
-    console.log("log")
-    axios.post('http://localhost:4000/logout',{withCredentials:true})
-    .then(()=> setUser({}));
-  }
+  
 
   return (
     <AuthModelContext.Provider value={{show:showAuthModel,setShow:setshowAuthModel}}>
-    <UserContext.Provider value={{...user,logout,setUser}}>
+    <UserContext.Provider value={{...user,setUser}}>
 
       <Header/>
       <AuthModel />
