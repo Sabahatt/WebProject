@@ -9,4 +9,5 @@ $nodemon server.js
 # Setup Mongo
 
 $ use reddit
+
 $ db.createCollection("users")
